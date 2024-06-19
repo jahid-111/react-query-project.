@@ -14,7 +14,7 @@ const Addproduct = () => {
   const mutation = useMutation({
     mutationFn: (newProduct) =>
       axios.post("http://localhost:3000/products", newProduct),
-
+    
     onSuccess: (data, variables, context) => {
       console.log(context); //calling OnMutate var
       QueryClient.invalidateQueries(["products"]);
