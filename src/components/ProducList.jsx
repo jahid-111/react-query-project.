@@ -43,12 +43,12 @@ const ProducList = () => {
         {products &&
           products.map((product) => (
             <li
-              className=" flex flex-col items-center m-2 border rounded-md"
+              className=" flex flex-col items-center m-2 border rounded-md w-52 h-52"
               key={product.id}
             >
               <img
                 onClick={() => handeDetailsClick(product.id)}
-                className=" object-cover h-52 w-80 rounded-sm"
+                className=" object-cover h-28  w-28 rounded-sm"
                 src={product.thumbnail}
                 alt={product.title}
               ></img>

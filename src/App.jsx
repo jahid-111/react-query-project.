@@ -14,10 +14,10 @@ function App() {
   } else {
     id = null;
   }
-  console.log(id);
+  // console.log(id);
 
   return (
-    <div className=" flex m-3 ">
+    <div className=" flex m-3  ">
       <Addproduct></Addproduct>
       <ProducList></ProducList>
       <DetailsProduct id={id}></DetailsProduct>
