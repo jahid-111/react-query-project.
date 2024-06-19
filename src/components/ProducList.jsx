@@ -1,6 +1,7 @@
-import React from "react";
+import { useContext } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
+import { DetailContext } from "../context";
 
 const retriveProducts = async ({ queryKey }) => {
   const response = await axios.get(`http://localhost:3000/${queryKey[0]}`);
@@ -8,6 +9,8 @@ const retriveProducts = async ({ queryKey }) => {
 };
 
 const ProducList = () => {
+  const { setData } = useContext(DetailContext);
+
   const {
     data: products,
     error,
@@ -18,8 +21,20 @@ const ProducList = () => {
     refetchInterval: 1000,
   });
 
+  function handeDetailsClick(selectedId) {
+    console.log("hello From Click Photo");
+    const clickedId = products.filter((item) => item.id === selectedId);
+    setData(clickedId);
+  }
+
   if (isLoading) return <h3 className=" text-green-400">Fetching Data....</h3>;
-  if (error) return <h3>An Error Occured : {error.messsage}</h3>;
+  if (error)
+    return (
+      <h3>
+        An Error Occured : {error.messsage} <br />
+        Select Data
+      </h3>
+    );
 
   return (
     <div className=" flex flex-col justify-center items-center w-3/5">
@@ -32,6 +47,7 @@ const ProducList = () => {
               key={product.id}
             >
               <img
+                onClick={() => handeDetailsClick(product.id)}
                 className=" object-cover h-52 w-80 rounded-sm"
                 src={product.thumbnail}
                 alt={product.title}

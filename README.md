@@ -1,7 +1,13 @@
-# npm i @tanstack/react-query
+||||||||||||| THIS PROJECT CODE MAKE WITH LEARNING |||||||||||||
 
-# npm @tanstack/react-query-devtools
+package : npm i @tanstack/react-query
+
+package : npm @tanstack/react-query-devtools
 
 => Fetch To - json-server 3000/port
 
+
+
 Tailwind CSS,
+
+click Dainamic data by ID, if data true visible,
