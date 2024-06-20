@@ -1,6 +1,6 @@
 import { QueryClient, useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import React, { useState } from "react";
+import { useState } from "react";
 
 const Addproduct = () => {
   const [state, setState] = useState({
@@ -14,23 +14,25 @@ const Addproduct = () => {
   const mutation = useMutation({
     mutationFn: (newProduct) =>
       axios.post("http://localhost:3000/products", newProduct),
-    
+
     onSuccess: (data, variables, context) => {
       console.log(context); //calling OnMutate var
       QueryClient.invalidateQueries(["products"]);
     },
-    onMutate: (variables) => {
+    onMutate: () => {
       //call before mutation
       return { greeting: "hello" };
     },
   });
+  console.log(mutation);
 
   function submitData(event) {
     event.preventDefault();
     console.log(state);
-
     const newData = { ...state, id: crypto.randomUUID().toString() };
     mutation.mutate(newData);
+
+    alert("adding");
   }
 
   function handleChange(e) {
@@ -77,7 +79,7 @@ const Addproduct = () => {
         />
       </div>
       <div className="flex items-center my-3">
-        <p className="w-1/3">Price:</p>
+        <p className="w-1/3">Price: $</p>
         <input
           type="number"
           value={state.price}
@@ -88,7 +90,7 @@ const Addproduct = () => {
         />
       </div>
       <div className="flex items-center my-3">
-        <p className="w-1/3">Rating:</p>
+        <p className="w-1/3">Rating: ⭐</p>
         <input
           type="number"
           value={state.rating}
@@ -106,7 +108,7 @@ const Addproduct = () => {
           name="thumbnail"
           onChange={handleChange}
           className=" h-10 p-2 border rounded w-2/3"
-          placeholder="Thumbnail"
+          placeholder="URL Accepted"
         />
       </div>
       <div className="flex items-center  my-7">

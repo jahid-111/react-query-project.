@@ -5,6 +5,7 @@ import ProducList from "./components/ProducList";
 import { DetailContext } from "./context";
 import Addproduct from "./components/Addproduct";
 
+// not deletd from Server (copied from AI)
 function App() {
   const { data } = useContext(DetailContext);
 

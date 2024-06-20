@@ -1,8 +1,7 @@
 import { useContext, useState } from "react";
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { DetailContext } from "../context";
-
 const retriveProducts = async ({ queryKey }) => {
   const response = await axios.get(
     `http://localhost:3000/products?_page=${queryKey[1].page}&_per_page=8`
@@ -13,7 +12,9 @@ const retriveProducts = async ({ queryKey }) => {
 const ProducList = () => {
   const { setData } = useContext(DetailContext);
   const [page, setPage] = useState(1);
+  const queryClient = useQueryClient();
 
+  // ============================== Get Data And Pagination
   const {
     data: products,
     error,
@@ -25,10 +26,26 @@ const ProducList = () => {
   });
 
   function handeDetailsClick(selectedId) {
-    console.log("hello From Click Photo");
     const clickedId = products.data.filter((item) => item.id === selectedId);
     setData(clickedId);
   }
+  // ----- end
+
+  // ================================== Delete A Data from  UI
+  const deletationData = useMutation({
+    mutationFn: (id) => axios.delete(`http://localhost:3000/products/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["products"]);
+    },
+  });
+
+  function handleDeleteProduct(id) {
+    console.log("Deleted Product By : ", id);
+    deletationData.mutate(id);
+  }
+  // ------- end
+
+  //  ===================================  JSX Start ===============================
 
   if (isLoading) return <h3 className=" text-green-400">Fetching Data....</h3>;
   if (error)
@@ -38,8 +55,6 @@ const ProducList = () => {
         Select Data
       </h3>
     );
-
-  // console.log(pr)
 
   return (
     <div className=" flex flex-col justify-center items-center w-3/5">
@@ -57,10 +72,18 @@ const ProducList = () => {
                 src={product.thumbnail}
                 alt={product.title}
               ></img>
-              <p className=" text-3xl my-3">{product.title}</p>
+              <p className=" text-xl my-3">{product.title}</p>
+              <button
+                onClick={() => handleDeleteProduct(product.id)}
+                className=" bg-red-500 text-white px-6 my-4"
+              >
+                Delete
+              </button>
             </li>
           ))}
       </ul>
+
+      {/* PAGINATION  */}
       <div className=" flex gap-2">
         {products.prev && (
           <button
